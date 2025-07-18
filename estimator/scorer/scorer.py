@@ -9,7 +9,7 @@ import rdkit.Chem.QED as QED
 import networkx as nx
 
 from ...common.chem import standardize_smiles
-from . import sa_scorer, kinase_scorer #, drd2_scorer, chemprop_scorer
+from . import sa_scorer, kinase_scorer, agonist_scorer, hallucination_scorer #, drd2_scorer, chemprop_scorer
 
 ### get scores
 def get_scores(objective, mols):
@@ -22,6 +22,10 @@ def get_scores(objective, mols):
         scores = kinase_scorer.get_scores(objective, mols_valid)
     elif objective.startswith('chemprop'):
         scores = chemprop_scorer.get_scores(objective, mols_valid)
+    elif objective == 'agonist':
+        scores = agonist_scorer.get_scores(objective, mols_valid)
+    elif objective == 'hallucination':
+        scores = hallucination_scorer.get_scores(objective, mols_valid)
     else: scores = [get_score(objective, mol) for mol in mols_valid]
         
     scores = [scores.pop(0) if mol is not None else 0. for mol in mols]
